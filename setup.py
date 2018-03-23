@@ -25,7 +25,7 @@ tests_require = [
 
 install_requires = [
     'setuptools',
-    'Django>=1.10.0',
+    'Django>=2.0',
     'six>=1.9'
 ]
 
@@ -54,10 +54,10 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",
-        "Framework :: Django :: 1.10",
+        "Framework :: Django :: 2.0",
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: BSD License"
     ],

@@ -8,7 +8,7 @@ class LazySignupBackend(ModelBackend):
     def authenticate(self, username=None):
         user_class = LazyUser.get_user_class()
         try:
-            return user_class.objects.get(**{
+            return user_class.model.objects.get(**{
                 get_user_model().USERNAME_FIELD: username
             })
         except user_class.DoesNotExist:
@@ -20,8 +20,8 @@ class LazySignupBackend(ModelBackend):
         # used by the is_lazy_user filter.
         user_class = LazyUser.get_user_class()
         try:
-            user = user_class.objects.get(pk=user_id)
-        except user_class.DoesNotExist:
+            user = user_class.model.objects.get(pk=user_id)
+        except user_class.model.DoesNotExist:
             user = None
         else:
             user.backend = 'lazysignup.backends.LazySignupBackend'

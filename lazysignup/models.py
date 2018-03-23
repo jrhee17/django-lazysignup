@@ -40,7 +40,7 @@ class LazyUserManager(models.Manager):
         """
         user_class = self.model.get_user_class()
         username = self.generate_username(user_class)
-        user = user_class.objects.create_user(username, '')
+        user = user_class.model.objects.create_user(username, '')
         self.create(user=user)
         return user, username
 
@@ -71,20 +71,23 @@ class LazyUserManager(models.Manager):
         if m:
             return m()
         else:
-            max_length = user_class._meta.get_field(
-                self.username_field).max_length
+            if hasattr(user_class.model, '_meta'):
+                max_length = user_class.model._meta.get_field(
+                    self.username_field).max_length
+            else:
+                max_length = 50  # somewhat safe assumption
             return uuid.uuid4().hex[:max_length]
 
 
 @six.python_2_unicode_compatible
 class LazyUser(models.Model):
-    user = models.OneToOneField(constants.LAZYSIGNUP_USER_MODEL)
+    user = models.OneToOneField(constants.LAZYSIGNUP_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(default=now, db_index=True)
     objects = LazyUserManager()
 
     @classmethod
     def get_user_class(cls):
-        return cls._meta.get_field('user').rel.to
+        return cls._meta.get_field('user').remote_field
 
     def __str__(self):
         return '{0}:{1}'.format(self.user, self.created)

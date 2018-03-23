@@ -443,7 +443,7 @@ class LazyTestCase(TestCase):
         lazy_view(self.request)
         backend = LazySignupBackend()
         user_class = LazyUser.get_user_class()
-        pk = user_class.objects.all()[0].pk
+        pk = user_class.model.objects.all()[0].pk
         self.assertEqual(user_class, type(backend.get_user(pk)))
 
     def test_session_name_conflict(self):
